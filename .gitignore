@@ -1,0 +1,6 @@
+node_modules/
+assets/
+bower_components/
+*.log
+*.sw[op]
+.tmp

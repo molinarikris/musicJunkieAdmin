@@ -1,0 +1,132 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul class="nav nav-sidebar">
+        <li ng-class="{active: (!currentShow)}">
+          <a href="" ng-click="currentShow = ''">
+            Dashboard</a></li>
+        <li ng-class="{active: (currentShow == 'newSong')}">
+          <a href="" ng-click="currentShow='newSong'">
+            <span class="glyphicon glyphicon-upload"></span> New Song</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <div ng-show="!currentShow">
+        <h1 class="page-header">Dashboard</h1>
+        <div class="panel" ng-class="act.type" ng-repeat="act in activities | orderBy:'-date'">
+          <div class="panel-heading" ng-bind="act.date | date:medium">
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-sm-8">
+                <h3 ng-bind="act.msg"></h3>
+              </div>
+              <div class="col-sm-4">
+                <h3><strong class="text-danger" ng-bind="act.comment"></strong></h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Song Form -->
+
+      <div ng-show="currentShow == 'newSong'">
+        <form class="form-horizontal">
+          <div class="form-group page-header">
+            <h1>Upload a new song</h1>
+          </div>
+          <div class="form-group">
+            <input type="file"
+            accept="audio/x-mpeg"
+            name="song"
+            ng-model="song.buffer"
+            ngf-select
+            onchange="checkID3(this.files[0])">
+          </div>
+          <div class="form-group">
+            <label for="title" class="col-sm-2">Title</label>
+            <div class="col-sm-10">
+              <input type="text"
+              name="title"
+              ng-model="song.title"
+              ng-minlength="1"
+              class="form-control"
+              id="title">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="artist" class="col-sm-2">Artist</label>
+            <div class="col-sm-10">
+              <input type="text"
+              name="artist"
+              ng-model="song.artist"
+              ng-minlength="1"
+              class="form-control"
+              id="artist">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="album" class="col-sm-2">Album*</label>
+            <div class="col-sm-10">
+              <input type="text"
+              name="album"
+              ng-model="song.album"
+              ng-required="false"
+              class="form-control"
+              id="album">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="genre"
+            class="col-sm-2">Genre</label>
+            <div class="col-sm-10">
+              <div class="radio" ng-repeat="genre in primaryGenres">
+                <input name="genre" type="radio" ng-model="song.genre" ng-value="genre">{{genre}}
+              </div>
+              <div class="radio" ng-repeat="genre in secondaryGenres">
+                <input type="radio" name="genre" ng-model="song.genre" ng-value="genre">{{genre}}
+              </div>
+              <div class="form-group">
+                <p>Use a secondary genre? (Not Recommended)
+                <input type="checkbox" ng-model="wantsSecondary"></p>
+                <input type="text" class="form-control" ng-model="song.genre" ng-disabled="!wantsSecondary" />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary" ng-click="songSubmit(song)">
+              Save
+            </button>
+          </div>
+          <div class="form-group" ng-if="loading">
+            <div class="progress">
+              <div class="progress-bar" aria-valuenow="{{loading.substring(0, loading.length-1)}}" role="progressbar" aria-valuemin="0" aria-valuemax="100" ng-style="{width: loading}">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- End New Song Form -->
+      <!-- Purge DB Form (only used in development) -->
+      <!--
+      <div ng-show="currentShow == 'purgeDB'">
+        <div class="page-header">
+          <h1>WARNING</h1>
+          <p class="lead">This will remove all items from MongoDB and the assets folder.</p>
+        </div>
+        <div class="container">
+          <h2>Are you sure you want to continue?</h2>
+          <button ng-click="purge()"
+            class="btn btn-danger">Delete Everything</button>
+        </div>
+      </div>
+      -->
+
+      <!-- End Purge DB Form -->
+
+    </div>
+  </div>
+</div>

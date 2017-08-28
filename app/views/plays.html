@@ -1,0 +1,61 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul class="nav nav-sidebar">
+        <li ng-class="{active: (currentShow=='')}">
+          <a href="" ng-click="toggleView('')"> Dashboard</a></li>
+        <li ng-repeat="list in playlists"
+          ng-class="{active: (currentShow == list)}">
+          <a href="" ng-click="toggleView(list) ">{{list}}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+      <!-- Dashboard -->
+
+      <div ng-show="!currentShow">
+        <div class="page-header">
+          <h1>Dashboard</h1>
+          <div class="alert alert-success" ng-if="successShow"><strong>Success!</strong> Excellent work with those pesky songs!</div>
+        </div>
+      </div>
+
+      <!-- End Dashboard -->
+      <!-- >>>>>>><<<<<< -->
+      <!-- Playlist-View -->
+
+      <div ng-show="currentShow">
+        <div class="page-header">
+          <h1 ng-bind="activeList.title"></h1>
+        </div>
+        <form>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Song</th>
+                <th>Artist</th>
+                <th>Album</th>
+                <th class="text-danger">Remove?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="song in activeList.songs" ng-class="{danger: (mods.indexOf(song.id) + 1)}">
+                <td ng-bind="$index + 1"></td>
+                <td ng-bind="song.title"></td>
+                <td ng-bind="song.artist"></td>
+                <td ng-bind="song.album"></td>
+                <td><input type="checkbox" ng-model="song.toEdit" ng-click="toggleMods(song)"/></td>
+              </tr>
+            </tbody>
+          </table>
+          <input type="submit" class="btn btn-default" value="Change" ng-disabled="!mods.length" ng-click="editList(activeList.title, mods)"/>
+        </form>
+      </div>
+
+      <!-- End Playlist-View -->
+
+    </div>
+  </div>
+</div>
